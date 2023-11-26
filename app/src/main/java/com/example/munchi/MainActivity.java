@@ -4,7 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.example.munchi.database.RecipeDatabase;
+
 public class MainActivity extends AppCompatActivity {
+
+    private RecipeDatabase recipeDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
