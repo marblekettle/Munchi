@@ -2,29 +2,23 @@ package com.example.munchi;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.text.Layout;
-import android.util.Pair;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.munchi.database.Ingredient;
-import com.example.munchi.database.Recipe;
 import com.example.munchi.database.RecipeDatabase;
 
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecipeDatabase recipeDB = new RecipeDatabase();
+    private RecipeDatabase recipeDB = new RecipeDatabase(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        testRecipes();
         setContentView(R.layout.activity_main);
     }
 
@@ -32,55 +26,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         View layo = this.findViewById(R.id.mainLayout);
+        TextView recipies = layo.findViewById(R.id.recipiesView);
+        Button testbtn = layo.findViewById(R.id.buttonTest);
         TextView recipe = layo.findViewById(R.id.recipeView);
+        testbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SQLiteDatabase db = recipeDB.getWritableDatabase();
+                recipeDB.onUpgrade(db, 0, 0);
+            }
+        });
         try {
             String txt = "";
-            for (Map.Entry<Integer, String> entry : recipeDB.getNames().entrySet()) {
+            for (Map.Entry<Integer, String> entry : recipeDB.getNames(5).entrySet()) {
                 txt = txt.concat(String.format("%d: %s\n", entry.getKey(), entry.getValue()));
             }
-            recipe.setText(txt);
+            recipies.setText(txt);
+            String txt2 = "";
+            String[] ingre = recipeDB.getRecipe(1).getInstructions();
+            System.out.println(ingre[0]);
+            for (Integer i = 0; i < ingre.length; i++) {
+                txt2 = txt2.concat(String.format("%s\n", ingre[i]));
+            }
+            recipe.setText(txt2);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            recipe.setText("Oops");
+            throw new RuntimeException(e);
         }
-    }
-
-    private void testRecipes() {
-        recipeDB.addRecipe(new Recipe(
-                "Bloody Mary",
-                true,
-                1,
-                new String[]{
-                        "1 part vodka",
-                        "2 parts tomato juice",
-                        "Worcestershire sauce or tabasco",
-                        "Black pepper",
-                        "Ice cubes"
-                },
-                new String[]{
-                        "Put the ice cubes in a large glass.",
-                        "Dash in a little sauce and add some pepper.",
-                        "Pour in the vodka and the tomato juice.",
-                        "Stir with the celery stick.",
-                        "Serve cold."
-                },
-                "Tasty on a hot day."));
-        recipeDB.addRecipe(new Recipe(
-                "Avocado Toast",
-                true,
-                2,
-                new String[]{
-                        "2 slices of bread",
-                        "1 avocado",
-                        "Salt and pepper"
-                },
-                new String[]{
-                        "Toast the bread in a toaster until lightly browned.",
-                        "Peel the avocado, slice it in half, remove the stone, and cut into thin slices.",
-                        "Cover each slice of toasted bread with half of the avocado.",
-                        "Sprinkle salt and pepper on the avocado to taste."
-                },
-                "Staple food for hipsters."
-        ));
     }
 }
