@@ -5,14 +5,14 @@ public class Recipe {
     private String name;
     private Boolean veg;
     private Integer serves;
-    private Ingredient[] ingredients;
+    private String[] ingredients;
     private String[] instructions;
     private String notes;
     public Recipe(
         String name,
         Boolean veg,
         Integer serves,
-        Ingredient[] ingredients,
+        String[] ingredients,
         String[] instructions,
         String notes) {
         this.name = name;
@@ -35,7 +35,7 @@ public class Recipe {
         return (serves);
     }
 
-    public Ingredient[] getIngredients() {
+    public String[] getIngredients() {
         return (ingredients);
     }
 

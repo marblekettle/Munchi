@@ -1,19 +1,21 @@
 package com.example.munchi.database;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class RecipeDatabase {
 
-    private Map<Integer, Recipe> recipeMap;
-    private int newId;
+    private Map<Integer, Recipe> recipeMap = new HashMap<Integer, Recipe>();
+    private int newId = 0;
 
     public RecipeDatabase() {
-        newId = 0;
+
     }
 
     public Recipe[] searchRecipe(String term) {
-        List<Recipe> out = null;
+        List<Recipe> out = new ArrayList<Recipe>();
         for (Map.Entry<Integer, Recipe> entry : recipeMap.entrySet()) {
             String[] instr = entry.getValue().getInstructions();
             for (String step : instr) {
@@ -27,7 +29,7 @@ public class RecipeDatabase {
     }
 
     public Map<Integer, String> getNames() {
-        Map<Integer, String> out = null;
+        Map<Integer, String> out = new HashMap<Integer, String>();
         for (Map.Entry<Integer, Recipe> entry : recipeMap.entrySet()) {
             out.put(entry.getKey(), entry.getValue().getName());
         }
@@ -43,6 +45,7 @@ public class RecipeDatabase {
 
     public void addRecipe(Recipe recipe) {
         recipeMap.put(newId, recipe);
+        newId += 1;
     }
 
     public void deleteRecipe(int id) {
