@@ -25,11 +25,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        View layo = this.findViewById(R.id.mainLayout);
-        TextView recipies = layo.findViewById(R.id.recipiesView);
-        Button testbtn = layo.findViewById(R.id.buttonTest);
-        TextView recipe = layo.findViewById(R.id.recipeView);
-        testbtn.setOnClickListener(new View.OnClickListener() {
+        View mainLayout = this.findViewById(R.id.mainLayout);
+        Button buttonTest = mainLayout.findViewById(R.id.buttonTest);
+        buttonTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SQLiteDatabase db = recipeDB.getWritableDatabase();
@@ -37,20 +35,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         try {
-            String txt = "";
-            for (Map.Entry<Integer, String> entry : recipeDB.getNames(5).entrySet()) {
-                txt = txt.concat(String.format("%d: %s\n", entry.getKey(), entry.getValue()));
-            }
-            recipies.setText(txt);
-            String txt2 = "";
-            String[] ingre = recipeDB.getRecipe(1).getInstructions();
-            System.out.println(ingre[0]);
-            for (Integer i = 0; i < ingre.length; i++) {
-                txt2 = txt2.concat(String.format("%s\n", ingre[i]));
-            }
-            recipe.setText(txt2);
+            
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
     }

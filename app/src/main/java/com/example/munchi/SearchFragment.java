@@ -59,7 +59,6 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         btnSearch = view.findViewById(R.id.buttonSearch);
         txtSearch = view.findViewById(R.id.textSearch);
-        txtApply = view.findViewById(R.id.textApply);
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
