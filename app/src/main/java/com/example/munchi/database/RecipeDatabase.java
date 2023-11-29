@@ -45,7 +45,7 @@ public class RecipeDatabase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public Recipe[] searchRecipe(String term) {
+    public Recipe[] searchRecipe(RecipeQuery query) {
         List<Recipe> out = new ArrayList<Recipe>();
         return ((Recipe[]) out.toArray());
     }
