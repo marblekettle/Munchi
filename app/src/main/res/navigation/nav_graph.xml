@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_mainFragment_to_recipeFragment"
             app:destination="@id/recipeFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_editRecipeFragment"
+            app:destination="@id/editRecipeFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -71,5 +74,23 @@
         <action
             android:id="@+id/action_searchResultsFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <argument
+            android:name="terms"
+            app:argType="string[]" />
+        <argument
+            android:name="veg"
+            app:argType="boolean" />
+        <argument
+            android:name="atLeast"
+            app:argType="integer" />
+        <argument
+            android:name="atMost"
+            app:argType="integer" />
+        <argument
+            android:name="ingredientsIn"
+            app:argType="string[]" />
+        <argument
+            android:name="ingredientsOut[]"
+            app:argType="string[]" />
     </fragment>
 </navigation>

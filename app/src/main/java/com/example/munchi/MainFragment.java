@@ -56,6 +56,7 @@ public class MainFragment extends Fragment {
         buttonTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ((MainActivity)getActivity()).getDB().clearDB();
                 ((MainActivity)getActivity()).testDB();
             }
         });
@@ -71,7 +72,10 @@ public class MainFragment extends Fragment {
         buttonNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", -1);
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_mainFragment_to_editRecipeFragment, bundle);
             }
         });
     }

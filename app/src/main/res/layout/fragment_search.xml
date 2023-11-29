@@ -21,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/buttonSearch2"
+            android:id="@+id/buttonBackFromSearch"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_marginStart="20dp"

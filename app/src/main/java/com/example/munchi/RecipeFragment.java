@@ -56,6 +56,25 @@ public class RecipeFragment extends Fragment {
                         .navigate(R.id.action_recipeFragment_to_mainFragment);
             }
         });
+        Button edit = view.findViewById(R.id.btnEditRecipe);
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("id", id);
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_recipeFragment_to_editRecipeFragment, bundle);
+            }
+        });
+        Button del = view.findViewById(R.id.btnDeleteRecipe);
+        del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).getDB().deleteRecipe(id);
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_recipeFragment_to_mainFragment);
+            }
+        });
         return (view);
     }
 

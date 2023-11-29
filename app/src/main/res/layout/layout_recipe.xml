@@ -10,7 +10,7 @@
         android:id="@+id/layoutRecipe"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:outlineProvider="none">
+        android:outlineProvider="bounds">
 
         <TextView
             android:id="@+id/txtSmallRecipe"

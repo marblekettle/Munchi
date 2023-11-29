@@ -39,6 +39,11 @@ public class RecipeDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        clearDB();
+    }
+
+    public void clearDB() {
+        SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS recipes");
         db.execSQL("DROP TABLE IF EXISTS ingredients");
         db.execSQL("DROP TABLE IF EXISTS steps");
@@ -112,22 +117,20 @@ public class RecipeDatabase extends SQLiteOpenHelper {
         return (recipe);
     }
 
-    public void addRecipe(Recipe recipe) {
+    public Integer addRecipe(Recipe recipe) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", recipe.getName());
         values.put("veg", Boolean.toString(recipe.getVeg()));
         values.put("serves", String.valueOf(recipe.getServes()));
         values.put("notes", recipe.getNotes());
+        Integer id = -1;
         try {
             db.beginTransaction();
             db.insert("recipes", null, values);
             Cursor idc = db.rawQuery("SELECT rowid, id FROM recipes WHERE rowid=last_insert_rowid()", null);
-            if (idc == null) {
-                throw new Exception("Oops");
-            }
             idc.moveToFirst();
-            Integer id = Integer.parseInt(idc.getString(1));
+            id = Integer.parseInt(idc.getString(1));
             for (String entry : recipe.getIngredients()) {
                 ContentValues ingredientValues = new ContentValues();
                 ingredientValues.put("recipe", id);
@@ -142,18 +145,60 @@ public class RecipeDatabase extends SQLiteOpenHelper {
             }
             db.setTransactionSuccessful();
         } catch (Exception e) {
+            id = -1;
+        } finally {
+            db.endTransaction();
+            return (id);
+        }
+    }
+
+    public void deleteRecipe(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            db.beginTransaction();
+            db.delete("recipes", "id=?", new String[]{String.valueOf(id)});
+            db.delete("ingredients", "recipe=?", new String[]{String.valueOf(id)});
+            db.delete("steps", "recipe=?", new String[]{String.valueOf(id)});
+            System.out.println("Nice!");
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         } finally {
             db.endTransaction();
         }
     }
 
-    public void deleteRecipe(int id) {
-
-    }
-
     public void updateRecipe(int id, Recipe recipe) {
-
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", recipe.getName());
+        values.put("veg", Boolean.toString(recipe.getVeg()));
+        values.put("serves", String.valueOf(recipe.getServes()));
+        values.put("notes", recipe.getNotes());
+        try {
+            db.beginTransaction();
+            db.update("recipes", values, "id=?", new String[]{"id"});
+            db.delete("ingredients", "id=?", new String[]{"id"});
+            db.delete("steps", "id=?", new String[]{"id"});
+            for (String entry : recipe.getIngredients()) {
+                ContentValues ingredientValues = new ContentValues();
+                ingredientValues.put("recipe", id);
+                ingredientValues.put("content", entry);
+                db.insert("ingredients", null, ingredientValues);
+            }
+            for (String entry : recipe.getInstructions()) {
+                ContentValues stepValues = new ContentValues();
+                stepValues.put("recipe", id);
+                stepValues.put("content", entry);
+                db.insert("steps", null, stepValues);
+            }
+            System.out.println("Nice");
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            db.endTransaction();
+        }
     }
 
     public class IdNotFoundError extends Exception {

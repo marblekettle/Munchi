@@ -3,6 +3,7 @@ package com.example.munchi;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link SearchFragment#newInstance} factory method to
@@ -18,54 +23,50 @@ import android.widget.TextView;
  */
 public class SearchFragment extends Fragment {
 
-    private Button btnSearch;
-    private EditText txtSearch;
-    private TextView txtApply;
-
+    View layout;
     public SearchFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SearchFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();
- /**       Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args); */
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    /**    if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        } */
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-        btnSearch = view.findViewById(R.id.buttonSearch);
-        txtSearch = view.findViewById(R.id.textSearch);
+        layout = view;
+        Button btnSearch = view.findViewById(R.id.buttonSearch);
+        Button btnBack = view.findViewById(R.id.buttonBackFromSearch);
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String text = String.valueOf(txtSearch.getText());
-                txtApply.setText(text);
+                Bundle bundle = new Bundle();
+                getQuery(bundle);
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_searchFragment_to_searchResultsFragment, bundle);
+            }
+        });
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v)
+                        .navigate(R.id.action_searchFragment_to_mainFragment);
             }
         });
         return view;
+    }
+
+    public void getQuery(Bundle b) {
+        EditText txtSearch = layout.findViewById(R.id.textSearch);
+        ArrayList<String> terms = new ArrayList<String>(
+                Arrays.asList(txtSearch.getText().toString().split(",")));
+        b.putStringArrayList("terms", terms);
     }
 }
