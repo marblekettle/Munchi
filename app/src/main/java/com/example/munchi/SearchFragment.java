@@ -67,6 +67,11 @@ public class SearchFragment extends Fragment {
         EditText txtSearch = layout.findViewById(R.id.textSearch);
         ArrayList<String> terms = new ArrayList<String>(
                 Arrays.asList(txtSearch.getText().toString().split(",")));
-        b.putStringArrayList("terms", terms);
+        b.putStringArray("terms", terms.toArray(new String[terms.size()]));
+        b.putBoolean("veg", false);
+        b.putInt("atLeast", -1);
+        b.putInt("atMost", -1);
+        b.putStringArray("ingredientsIn", new String[0]);
+        b.putStringArray("ingredientsOut", new String[0]);
     }
 }

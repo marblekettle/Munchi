@@ -8,8 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class RecipeDatabase extends SQLiteOpenHelper {
     public RecipeDatabase(Context context) {
@@ -50,9 +52,27 @@ public class RecipeDatabase extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public Recipe[] searchRecipe(RecipeQuery query) {
-        List<Recipe> out = new ArrayList<Recipe>();
-        return ((Recipe[]) out.toArray());
+    public Map<Integer, Recipe> searchRecipe(RecipeQuery query) {
+        Map<Integer, Recipe> out = new HashMap<Integer, Recipe>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.query("steps", new String[]{"recipe", "content"}, "content LIKE '%'||?||'%'",
+                query.getTerms(), null, null,null,null);
+        c.moveToFirst();
+        Set<Integer> qualify = new HashSet<Integer>();
+        System.out.println(c.isAfterLast());
+        while (!c.isAfterLast()) {
+            System.out.println(c.getInt(0));
+            qualify.add(c.getInt(0));
+            c.moveToNext();
+        }
+        for (Integer entry : qualify) {
+            try {
+                out.put(entry, getRecipe(entry));
+            } catch (Exception e) {
+
+            }
+        }
+        return (out);
     }
 
     public Map<Integer, Recipe> getSummary(int howMany) {
@@ -192,7 +212,6 @@ public class RecipeDatabase extends SQLiteOpenHelper {
                 stepValues.put("content", entry);
                 db.insert("steps", null, stepValues);
             }
-            System.out.println("Nice");
             db.setTransactionSuccessful();
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -107,6 +107,20 @@ public class EditRecipeFragment extends Fragment {
                         .navigate(R.id.action_editRecipeFragment_to_recipeFragment, bundle);
             }
         });
+        Button btnAddIngredient = view.findViewById(R.id.btnAddIngredient);
+        btnAddIngredient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("addIngredient");
+            }
+        });
+        Button btnAddStep = view.findViewById(R.id.btnAddStep);
+        btnAddStep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("addStep");
+            }
+        });
     }
 
     private Recipe ToRecipe(View v) {
@@ -115,9 +129,6 @@ public class EditRecipeFragment extends Fragment {
         CheckBox veg = v.findViewById(R.id.boxVeg);
         TextView serves = v.findViewById(R.id.txtEditServes);
         TextView notes = v.findViewById(R.id.txtEditNotes);
-        System.out.println(name);
-        System.out.println(serves);
-        System.out.println(notes);
         Recipe recipe = new Recipe(
                 name.getText().toString(),
                 veg.isChecked(),

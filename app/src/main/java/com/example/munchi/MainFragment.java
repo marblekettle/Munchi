@@ -17,11 +17,6 @@ import android.widget.Button;
 import com.example.munchi.adapter.RecipesAdapter;
 import com.example.munchi.database.RecipeDatabase;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MainFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MainFragment extends Fragment {
     private RecipeDatabase recipeDB;
     public MainFragment() {
@@ -36,7 +31,6 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         recipeDB = ((MainActivity)getActivity()).getDB();
-        System.out.println(recipeDB.getSummary(5).size());
     }
 
     @Override
@@ -50,7 +44,8 @@ public class MainFragment extends Fragment {
         RecyclerView viewRecipes = view.findViewById(R.id.viewRecipes);
         viewRecipes.setLayoutManager(new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false));
-        RecipesAdapter ra = new RecipesAdapter(getContext(), recipeDB.getSummary(5));
+        RecipesAdapter ra = new RecipesAdapter(getContext(),
+                recipeDB.getSummary(10), false);
         viewRecipes.setAdapter(ra);
         Button buttonTest = view.findViewById(R.id.buttonTest);
         buttonTest.setOnClickListener(new View.OnClickListener() {

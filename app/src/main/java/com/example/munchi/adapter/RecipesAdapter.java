@@ -18,9 +18,11 @@ import java.util.Map;
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesHolder> {
     Context context;
     Map<Integer, Recipe> recipes;
-    public RecipesAdapter(Context context, Map<Integer, Recipe> recipes) {
+    Boolean searchMode;
+    public RecipesAdapter(Context context, Map<Integer, Recipe> recipes, Boolean searchMode) {
         this.context = context;
         this.recipes = recipes;
+        this.searchMode = searchMode;
     }
 
     @Override
@@ -63,8 +65,13 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesH
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     bundle.putInt("id", id);
-                    Navigation.findNavController(v)
-                            .navigate(R.id.action_mainFragment_to_recipeFragment, bundle);
+                    if (searchMode) {
+                        Navigation.findNavController(v).navigate(R.id.
+                                action_searchResultsFragment_to_recipeFragment, bundle);
+                    } else {
+                        Navigation.findNavController(v).navigate(R.id.
+                                action_mainFragment_to_recipeFragment, bundle);
+                    }
                 }
             });
         }

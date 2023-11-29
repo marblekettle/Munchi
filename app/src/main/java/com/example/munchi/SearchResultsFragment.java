@@ -4,17 +4,21 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.munchi.adapter.RecipesAdapter;
 import com.example.munchi.database.Recipe;
 import com.example.munchi.database.RecipeQuery;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,5 +76,15 @@ public class SearchResultsFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        Map<Integer, Recipe> results = ((MainActivity)getActivity()).getDB().searchRecipe(query);
+        RecyclerView viewResults = view.findViewById(R.id.viewResults);
+        viewResults.setLayoutManager(new LinearLayoutManager(getContext(),
+                LinearLayoutManager.VERTICAL, false));
+        RecipesAdapter ra = new RecipesAdapter(getContext(), results, true);
+        viewResults.setAdapter(ra);
     }
 }

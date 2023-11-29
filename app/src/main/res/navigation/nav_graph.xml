@@ -92,5 +92,8 @@
         <argument
             android:name="ingredientsOut[]"
             app:argType="string[]" />
+        <action
+            android:id="@+id/action_searchResultsFragment_to_recipeFragment"
+            app:destination="@id/recipeFragment" />
     </fragment>
 </navigation>
