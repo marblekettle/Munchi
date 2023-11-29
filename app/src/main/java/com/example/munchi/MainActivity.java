@@ -41,4 +41,8 @@ public class MainActivity extends AppCompatActivity {
     public RecipeDatabase getDB() {
         return (recipeDB);
     }
+
+    public void testDB() {
+        recipeDB.testRecipes();
+    }
 }

@@ -36,7 +36,7 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         recipeDB = ((MainActivity)getActivity()).getDB();
-        System.out.println(recipeDB);
+        System.out.println(recipeDB.getSummary(5).size());
     }
 
     @Override
@@ -50,15 +50,13 @@ public class MainFragment extends Fragment {
         RecyclerView viewRecipes = view.findViewById(R.id.viewRecipes);
         viewRecipes.setLayoutManager(new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false));
-        RecipesAdapter ra = new RecipesAdapter(getContext(), recipeDB.getNames(5));
+        RecipesAdapter ra = new RecipesAdapter(getContext(), recipeDB.getSummary(5));
         viewRecipes.setAdapter(ra);
         Button buttonTest = view.findViewById(R.id.buttonTest);
-        System.out.println(recipeDB.getNames(10).size());
         buttonTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SQLiteDatabase db = recipeDB.getWritableDatabase();
-                recipeDB.onUpgrade(db, 0, 0);
+                ((MainActivity)getActivity()).testDB();
             }
         });
         Button buttonSearch = view.findViewById(R.id.buttonSearchGo);

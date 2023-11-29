@@ -1,26 +1,24 @@
 package com.example.munchi.adapter;
 
 import android.content.Context;
-import android.util.Pair;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.munchi.R;
+import com.example.munchi.database.Recipe;
 
-import org.w3c.dom.Text;
-
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesHolder> {
     Context context;
-    Map<Integer, String> recipes;
-    public RecipesAdapter(Context context, Map<Integer, String> recipes) {
+    Map<Integer, Recipe> recipes;
+    public RecipesAdapter(Context context, Map<Integer, Recipe> recipes) {
         this.context = context;
         this.recipes = recipes;
     }
@@ -34,9 +32,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesH
 
     @Override
     public void onBindViewHolder(RecipesHolder holder, int position) {
-        Collection<String> nameCol = recipes.values();
-        String[] names = nameCol.toArray(new String[0]);
-        holder.setName(names[position]);
+        Integer[] idCol = recipes.keySet().toArray(new Integer[recipes.size()]);
+        holder.setRecipe(idCol[position], recipes.get(idCol[position]));
     }
 
     @Override
@@ -45,15 +42,31 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipesH
     }
 
     public class RecipesHolder extends RecyclerView.ViewHolder {
-        private TextView name;
+        private Integer id;
+        private Recipe recipe;
+        private View layout;
         public RecipesHolder(View itemView) {
             super(itemView);
-            View layout = itemView.findViewById(R.id.layoutRecipe);
-            name = layout.findViewById(R.id.textRecipeSmall);
+            layout = itemView.findViewById(R.id.layoutRecipe);
         }
 
-        public void setName(String name) {
-            this.name.setText(name);
+        public void setRecipe(Integer id, Recipe recipe) {
+            this.id = id;
+            TextView name = layout.findViewById(R.id.txtSmallRecipe);
+            TextView veg = layout.findViewById(R.id.txtSmallVeg);
+            TextView serves = layout.findViewById(R.id.txtSmallServes);
+            name.setText(recipe.getName());
+            veg.setText(recipe.getVeg() ? "V" : "");
+            serves.setText(String.valueOf(recipe.getServes()));
+            layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id", id);
+                    Navigation.findNavController(v)
+                            .navigate(R.id.action_mainFragment_to_recipeFragment, bundle);
+                }
+            });
         }
     }
 }

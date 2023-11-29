@@ -35,7 +35,6 @@ public class RecipeDatabase extends SQLiteOpenHelper {
                 "recipe  INTEGER NOT NULL," +
                 "content TEXT NOT NULL" +
                 ")");
-        testRecipes();
     }
 
     @Override
@@ -51,22 +50,27 @@ public class RecipeDatabase extends SQLiteOpenHelper {
         return ((Recipe[]) out.toArray());
     }
 
-    public Map<Integer, String> getNames(int howMany) {
+    public Map<Integer, Recipe> getSummary(int howMany) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor rc = db.query("recipes", new String[]{"id", "name"}, null,
-            null, null, null, "id", String.valueOf(howMany));
+        Cursor rc = db.query("recipes", new String[]{"id", "name", "veg", "serves"},
+                null, null, null, null, "id", String.valueOf(howMany));
         rc.moveToFirst();
-        Map<Integer, String> out = new HashMap<Integer, String>();
+        Map<Integer, Recipe> out = new HashMap<Integer, Recipe>();
         if (rc != null) {
             while (!rc.isAfterLast()) {
-                out.put(Integer.parseInt(rc.getString(0)), rc.getString(1));
+                out.put(Integer.parseInt(rc.getString(0)),
+                        new Recipe(rc.getString(1),
+                                Boolean.parseBoolean(rc.getString(2)),
+                                Integer.parseInt(rc.getString(3)),
+                                null, null, ""
+                        ));
                 rc.moveToNext();
             }
         }
         return (out);
     }
 
-    public Recipe getRecipe(int id) throws Exception {
+    public Recipe getRecipe(int id) throws IdNotFoundError {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor rc = db.query("recipes",
                 new String[]{"id", "name", "veg", "serves", "notes"}, "id=?",
@@ -152,13 +156,13 @@ public class RecipeDatabase extends SQLiteOpenHelper {
 
     }
 
-    class IdNotFoundError extends Exception {
+    public class IdNotFoundError extends Exception {
         IdNotFoundError(String error) {
             super(error);
         }
     }
 
-    private void testRecipes() {
+    public void testRecipes() {
         addRecipe(new Recipe(
                 "Bloody Mary",
                 true,
