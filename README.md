@@ -12,6 +12,9 @@ on Windows. If you receive an error that no device is connected, an .apk should 
 `[Project dir]/app/build/outputs/apk/debug`<br/>
 which can be copied and installed on an Android device.<br/><br/>
 
+To look at a recipe, click its name in the list.<br/>
+To search for a recipe, click the search button, enter search terms, and click search again.<br/><br/>
+
 The entire application uses one Activity that switches between several Fragments. This was done so that<br/>
 - nav_graph can be used easily for navigating through pages and communicating data, such as search queries and recipe IDs, between them.
 - Objects that all Fragments need access to, such as the database handler, can be stored as an attribute of the main Activity rather than the application.

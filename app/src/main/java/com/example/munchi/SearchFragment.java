@@ -18,15 +18,16 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link SearchFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * This fragment will contain all the search options to filter recipes on
+ * the main page with. The contents of the text edit fields and checkboxes
+ * are passed as arguments to the main fragment. 
  */
+
 public class SearchFragment extends Fragment {
 
     View layout;
     public SearchFragment() {
-        // Required empty public constructor
+        
     }
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();
@@ -43,6 +44,9 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         layout = view;
+
+		// Button functionality
+
         Button btnSearch = view.findViewById(R.id.buttonSearch);
         Button btnBack = view.findViewById(R.id.buttonBackFromSearch);
         btnSearch.setOnClickListener(new View.OnClickListener() {
@@ -63,6 +67,8 @@ public class SearchFragment extends Fragment {
         });
         return view;
     }
+
+	// Retrieve the query data from the data fields
 
     public void getQuery(Bundle b) {
         EditText txtSearch = layout.findViewById(R.id.textSearch);

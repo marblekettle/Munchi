@@ -22,13 +22,19 @@ import com.example.munchi.database.RecipeDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * On this fragment new recipes will be created and existing recipes will
+ * be edited. It will contain two RecyclerLists to keep track of the
+ * ingredients and steps defined by the user.
+ */
+
 public class EditRecipeFragment extends Fragment {
 
     private Integer id;
     private View layout;
     private String[] ingredientList;
     public EditRecipeFragment() {
-        // Required empty public constructor
+        
     }
 
     public static EditRecipeFragment newInstance(Integer id) {
@@ -62,6 +68,10 @@ public class EditRecipeFragment extends Fragment {
         RecyclerView ingredients = view.findViewById(R.id.listIngredients);
         ingredients.setLayoutManager(new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false));
+
+		// In the case of an id of -1, a new recipe is created. Otherwise, 
+		// the recipe with that id is edited.
+
         if (id == -1) {
             ingredientList = new String[] {""};
         } else {
@@ -71,11 +81,17 @@ public class EditRecipeFragment extends Fragment {
                 Recipe recipe = db.getRecipe(id);
                 FromRecipe(view, recipe);
             } catch (RecipeDatabase.IdNotFoundError e) {
+
+		// Needs a proper handling
+
                 throw new RuntimeException(e);
             }
         }
         IngredientAdapter ia = new IngredientAdapter(getContext(), ingredientList);
         ingredients.setAdapter(ia);
+
+		// Button functionality
+
         Button btnCancel = view.findViewById(R.id.btnCancelEdit);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override

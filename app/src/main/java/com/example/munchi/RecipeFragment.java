@@ -15,15 +15,16 @@ import com.example.munchi.database.Recipe;
 import com.example.munchi.database.RecipeDatabase;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link RecipeFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * The recipe fragment loads information about a specific recipe from the
+ * database and displays it. Each recipe is identified by the primary key
+ * 'id'. 
  */
+
 public class RecipeFragment extends Fragment {
     private Integer id;
 
     public RecipeFragment() {
-        // Required empty public constructor
+        
     }
 
     public static RecipeFragment newInstance(Integer id) {
@@ -45,9 +46,11 @@ public class RecipeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
         putRecipe(view);
+
+		// Define button functionality
+
         Button back = view.findViewById(R.id.btnBackFromRecipe);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +80,8 @@ public class RecipeFragment extends Fragment {
         });
         return (view);
     }
+
+	// Fills in the different textviews with recipe data
 
     private void putRecipe(View v) {
         TextView recipeName = v.findViewById(R.id.txtRecipeName);

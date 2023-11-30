@@ -22,6 +22,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The Main Activity contains the RecipeDatabase object which allows for
+ * communication between the SQLite database and the application. All
+ * fragments can access this through getActivity().getDB(). The testDB()-
+ * method instantly adds two preset recipes to the database.
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     private RecipeDatabase recipeDB;

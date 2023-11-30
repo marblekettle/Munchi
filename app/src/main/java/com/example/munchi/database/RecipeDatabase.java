@@ -18,6 +18,8 @@ public class RecipeDatabase extends SQLiteOpenHelper {
         super(context, "recipeDatabase", null, 1);
     }
 
+	// Create tables
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE recipes (" +
@@ -44,6 +46,8 @@ public class RecipeDatabase extends SQLiteOpenHelper {
         clearDB();
     }
 
+	// Remove and regenerate tables
+
     public void clearDB() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DROP TABLE IF EXISTS recipes");
@@ -51,6 +55,11 @@ public class RecipeDatabase extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS steps");
         onCreate(db);
     }
+
+	/**
+	 *  Generate a map linking recipe IDs to Recipe objects depending on
+	 *  the query. Default options will fetch all recipes in the database.
+	 */
 
     public Map<Integer, Recipe> searchRecipe(RecipeQuery query) {
         Map<Integer, Recipe> out = new HashMap<Integer, Recipe>();
@@ -61,6 +70,9 @@ public class RecipeDatabase extends SQLiteOpenHelper {
         if (terms == null || terms.length == 0) {
             c = db.query("recipes", new String[]{"id"}, null,
                     null, null, null, null, null);
+		
+		// Test if a term is found in the instructions
+
         } else {
             c = db.query("steps", new String[]{"recipe", "content"}, "content LIKE '%'||?||'%'",
                     terms, null, null,null,null);
@@ -82,6 +94,8 @@ public class RecipeDatabase extends SQLiteOpenHelper {
         }
         return (out);
     }
+
+	// Fetch a recipe with a specific id
 
     public Recipe getRecipe(int id) throws IdNotFoundError {
         SQLiteDatabase db = this.getReadableDatabase();

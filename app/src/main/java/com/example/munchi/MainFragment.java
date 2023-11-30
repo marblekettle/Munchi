@@ -23,11 +23,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 
+/**
+ * The main fragment contains a RecycleView displaying the names of each
+ * recipe, along with if they are vegetarian and how many people they serve.
+ * The recipes are filtered according to a RecipeQuery object that is
+ * generated when the fragment is loaded, based on arguments passed to it.
+ * By default, the arguments create a query that includes all recipes, but
+ * by using the search function it can be made more specific.
+ */
+
 public class MainFragment extends Fragment {
     private RecipeDatabase recipeDB;
     private RecipeQuery query;
     public MainFragment() {
-        // Required empty public constructor
+        
     }
     public static MainFragment newInstance(RecipeQuery query) {
         MainFragment fragment = new MainFragment();
@@ -70,13 +79,21 @@ public class MainFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        Map<Integer, Recipe> results = ((MainActivity)getActivity()).getDB().searchRecipe(query);
-        RecyclerView viewRecipes = view.findViewById(R.id.viewRecipes);
+        // Recipes are loaded according to query
+		
+		Map<Integer, Recipe> results = ((MainActivity)getActivity()).getDB().searchRecipe(query);
+        
+		// The RecyclerView is filled with recipes
+		
+		RecyclerView viewRecipes = view.findViewById(R.id.viewRecipes);
         viewRecipes.setLayoutManager(new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false));
         RecipesAdapter ra = new RecipesAdapter(getContext(), results);
         viewRecipes.setAdapter(ra);
-        Button buttonTest = view.findViewById(R.id.buttonTest);
+
+        // Button functionality is defined
+
+		Button buttonTest = view.findViewById(R.id.buttonTest);
         buttonTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
