@@ -15,15 +15,33 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.munchi.adapter.RecipesAdapter;
+import com.example.munchi.database.Recipe;
 import com.example.munchi.database.RecipeDatabase;
+import com.example.munchi.database.RecipeQuery;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
 
 public class MainFragment extends Fragment {
     private RecipeDatabase recipeDB;
+    private RecipeQuery query;
     public MainFragment() {
         // Required empty public constructor
     }
-    public static MainFragment newInstance() {
+    public static MainFragment newInstance(RecipeQuery query) {
         MainFragment fragment = new MainFragment();
+        Bundle args = new Bundle();
+        Object ListArray;
+        args.putStringArrayList("terms", (ArrayList<String>) Arrays.asList(query.getTerms()));
+        args.putBoolean("veg", query.getVeg());
+        args.putInt("atLeast", query.getAtLeast());
+        args.putInt("atMost", query.getAtMost());
+        args.putStringArrayList("ingredientsIn",
+                (ArrayList<String>)Arrays.asList(query.getIngredientsIn()));
+        args.putStringArrayList("ingredientsOut",
+                (ArrayList<String>)Arrays.asList(query.getIngredientsOut()));
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -31,21 +49,32 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         recipeDB = ((MainActivity)getActivity()).getDB();
+        if (getArguments() != null) {
+            this.query = new RecipeQuery(
+                    getArguments().getStringArray("terms"),
+                    getArguments().getBoolean("veg"),
+                    getArguments().getInt("atLeast"),
+                    getArguments().getInt("atMost"),
+                    getArguments().getStringArray("ingredientsIn"),
+                    getArguments().getStringArray("ingredientsOut")
+            );
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return (inflater.inflate(R.layout.fragment_main, container, false));
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        Map<Integer, Recipe> results = ((MainActivity)getActivity()).getDB().searchRecipe(query);
         RecyclerView viewRecipes = view.findViewById(R.id.viewRecipes);
         viewRecipes.setLayoutManager(new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false));
-        RecipesAdapter ra = new RecipesAdapter(getContext(),
-                recipeDB.getSummary(10), false);
+        RecipesAdapter ra = new RecipesAdapter(getContext(), results);
         viewRecipes.setAdapter(ra);
         Button buttonTest = view.findViewById(R.id.buttonTest);
         buttonTest.setOnClickListener(new View.OnClickListener() {

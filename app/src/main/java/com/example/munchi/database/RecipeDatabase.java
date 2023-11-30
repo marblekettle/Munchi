@@ -55,41 +55,29 @@ public class RecipeDatabase extends SQLiteOpenHelper {
     public Map<Integer, Recipe> searchRecipe(RecipeQuery query) {
         Map<Integer, Recipe> out = new HashMap<Integer, Recipe>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.query("steps", new String[]{"recipe", "content"}, "content LIKE '%'||?||'%'",
-                query.getTerms(), null, null,null,null);
-        c.moveToFirst();
+        String[] terms = query.getTerms();
         Set<Integer> qualify = new HashSet<Integer>();
-        System.out.println(c.isAfterLast());
+        Cursor c;
+        if (terms == null || terms.length == 0) {
+            c = db.query("recipes", new String[]{"id"}, null,
+                    null, null, null, null, null);
+        } else {
+            c = db.query("steps", new String[]{"recipe", "content"}, "content LIKE '%'||?||'%'",
+                    terms, null, null,null,null);
+        }
+        c.moveToFirst();
         while (!c.isAfterLast()) {
-            System.out.println(c.getInt(0));
             qualify.add(c.getInt(0));
             c.moveToNext();
         }
         for (Integer entry : qualify) {
             try {
-                out.put(entry, getRecipe(entry));
+                Recipe recipe = getRecipe(entry);
+                if (query.getVeg() && !recipe.getVeg())
+                    continue ;
+                out.put(entry, recipe);
             } catch (Exception e) {
 
-            }
-        }
-        return (out);
-    }
-
-    public Map<Integer, Recipe> getSummary(int howMany) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor rc = db.query("recipes", new String[]{"id", "name", "veg", "serves"},
-                null, null, null, null, "id", String.valueOf(howMany));
-        rc.moveToFirst();
-        Map<Integer, Recipe> out = new HashMap<Integer, Recipe>();
-        if (rc != null) {
-            while (!rc.isAfterLast()) {
-                out.put(Integer.parseInt(rc.getString(0)),
-                        new Recipe(rc.getString(1),
-                                Boolean.parseBoolean(rc.getString(2)),
-                                Integer.parseInt(rc.getString(3)),
-                                null, null, ""
-                        ));
-                rc.moveToNext();
             }
         }
         return (out);

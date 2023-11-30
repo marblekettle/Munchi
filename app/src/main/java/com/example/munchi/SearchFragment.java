@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -50,7 +51,7 @@ public class SearchFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 getQuery(bundle);
                 Navigation.findNavController(v)
-                        .navigate(R.id.action_searchFragment_to_searchResultsFragment, bundle);
+                        .navigate(R.id.action_searchFragment_to_mainFragment, bundle);
             }
         });
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -65,10 +66,11 @@ public class SearchFragment extends Fragment {
 
     public void getQuery(Bundle b) {
         EditText txtSearch = layout.findViewById(R.id.textSearch);
+        CheckBox boxVeg = layout.findViewById(R.id.boxSearchVeg);
         ArrayList<String> terms = new ArrayList<String>(
                 Arrays.asList(txtSearch.getText().toString().split(",")));
         b.putStringArray("terms", terms.toArray(new String[terms.size()]));
-        b.putBoolean("veg", false);
+        b.putBoolean("veg", boxVeg.isChecked());
         b.putInt("atLeast", -1);
         b.putInt("atMost", -1);
         b.putStringArray("ingredientsIn", new String[0]);

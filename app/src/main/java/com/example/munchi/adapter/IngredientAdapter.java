@@ -33,9 +33,27 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
         return (new IngredientHolder(v));
     }
 
+    /**
+     FloatingActionButton delIng = layout.findViewById(R.id.btnDelIngredient);
+     delIng.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+    System.out.println(String.valueOf(getAdapterPosition()));
+    }
+    });*/
+
     @Override
     public void onBindViewHolder(IngredientHolder holder, int position) {
-        holder.setIngredient(ingredients.get(position));
+        TextView txt = holder.itemView.findViewById(R.id.txtIngredient);
+        txt.setText(ingredients.get(position));
+        FloatingActionButton del = holder.itemView.findViewById(R.id.btnDelIngredient);
+        del.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
 
     @Override
@@ -45,27 +63,8 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.In
 
     public class IngredientHolder extends RecyclerView.ViewHolder {
 
-        private View layout;
         public IngredientHolder(View itemView) {
             super(itemView);
-            layout = itemView.findViewById(R.id.layoutIngredient);
-            FloatingActionButton delIng = layout.findViewById(R.id.btnDelIngredient);
-            delIng.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    System.out.println("delete");
-                }
-            });
-        }
-        public void setIngredient(String ingredient) {
-            TextView text = layout.findViewById(R.id.txtIngredient);
-            text.setText(ingredient);
-        }
-
-        public String getIngredient() {
-            TextView text = layout.findViewById(R.id.txtIngredient);
-            String out = text.getText().toString();
-            return (out);
         }
     }
 }

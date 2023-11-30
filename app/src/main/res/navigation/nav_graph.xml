@@ -18,6 +18,27 @@
         <action
             android:id="@+id/action_mainFragment_to_editRecipeFragment"
             app:destination="@id/editRecipeFragment" />
+        <argument
+            android:name="terms"
+            app:argType="string[]" />
+        <argument
+            android:name="veg"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <argument
+            android:name="atLeast"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
+            android:name="atMost"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
+            android:name="ingredientsIn"
+            app:argType="string[]" />
+        <argument
+            android:name="ingredientsOut"
+            app:argType="string[]" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -27,9 +48,6 @@
         <action
             android:id="@+id/action_searchFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
-        <action
-            android:id="@+id/action_searchFragment_to_searchResultsFragment"
-            app:destination="@id/searchResultsFragment" />
     </fragment>
     <fragment
         android:id="@+id/recipeFragment"
@@ -62,38 +80,5 @@
             android:name="id"
             app:argType="integer"
             android:defaultValue="-1" />
-    </fragment>
-    <fragment
-        android:id="@+id/searchResultsFragment"
-        android:name="com.example.munchi.SearchResultsFragment"
-        android:label="fragment_search_results"
-        tools:layout="@layout/fragment_search_results" >
-        <action
-            android:id="@+id/action_searchResultsFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-        <action
-            android:id="@+id/action_searchResultsFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
-        <argument
-            android:name="terms"
-            app:argType="string[]" />
-        <argument
-            android:name="veg"
-            app:argType="boolean" />
-        <argument
-            android:name="atLeast"
-            app:argType="integer" />
-        <argument
-            android:name="atMost"
-            app:argType="integer" />
-        <argument
-            android:name="ingredientsIn"
-            app:argType="string[]" />
-        <argument
-            android:name="ingredientsOut[]"
-            app:argType="string[]" />
-        <action
-            android:id="@+id/action_searchResultsFragment_to_recipeFragment"
-            app:destination="@id/recipeFragment" />
     </fragment>
 </navigation>
